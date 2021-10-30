@@ -19,13 +19,22 @@ changeColor.addEventListener("click", async () => {
   });
 });
 
-let fileSelector = document.getElementById('file-selector');
+let fileSelector = document.getElementById("fileSelector");
 
-fileSelector.addEventListener('change', async (event) => {
-  const fileList = event.target.files;
-  console.log(event);
-  console.log(fileList);
+fileSelector.addEventListener("change", (event) => {
+  const [file] = event.target.files;
+  const reader = new FileReader();
+
+  reader.addEventListener("load", () => {
+    // this will then display a text file
+    console.log(reader.result);
+  }, false);
+
+  if (file) {
+    reader.readAsText(file);
+  }
 });
+
 
 // The body of this function will be executed as a content script inside the
 // current page
