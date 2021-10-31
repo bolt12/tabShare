@@ -11,3 +11,13 @@ button.current {
   box-shadow: 0 0 0 2px white,
               0 0 0 4px black;
 }
+
+.err {
+  background: #ffe6ee;
+  border: 1px solid #b1395f;
+}
+
+.emsg {
+  color: #c12020
+  ; font-weight: bold;
+}
