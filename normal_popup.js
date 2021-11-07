@@ -1,7 +1,11 @@
 // let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
 // Top level file input form object;
-let fileSelector = document.getElementById("fileSelector");
+const fileSelector = document.getElementById("fileSelector");
+const shareButton = document.getElementById("shareButton");
+const groupSwitch = document.getElementById("groupSwitch");
+const groupInput = document.getElementById("groupInput");
+
 
 fileSelector.addEventListener("change", (event) => {
   // Get the file
@@ -59,18 +63,25 @@ fileSelector.addEventListener("change", (event) => {
 
 });
 
-let shareButton = document.getElementById("shareButton");
-
 shareButton.addEventListener("click", async (event) => {
   const filename = "tabShare.json";
   const selectedTabs = await chrome.tabs.query({
     currentWindow: false,
     highlighted: true
   });
-  const result = { tabs: [] };
-  for (const tab of selectedTabs) {
-    result.tabs.push(tab.url);
+  const result = { groups: [] };
+  const group = { name: "", tabs: [] };
+
+  // Check for group
+  if (groupSwitch.checked && groupInput.value) {
+    group.name = groupInput.value;
   }
+
+  for (const tab of selectedTabs) {
+    group.tabs.push(tab.url);
+  }
+
+  result.groups.push(group);
 
   const blob = new Blob([JSON.stringify(result)], {type : 'application/json'});
   const blobURL = window.URL.createObjectURL(blob);
@@ -90,6 +101,15 @@ shareButton.addEventListener("click", async (event) => {
   tempLink.click();
   document.body.removeChild(tempLink);
 });
+
+groupSwitch.addEventListener("change", (event) => {
+  if (groupSwitch.checked) {
+    groupInput.disabled = false;
+  } else {
+    groupInput.value = "";
+    groupInput.disabled = true;
+  }
+})
 
 // -------- Auxiliary function --------
 

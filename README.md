@@ -20,9 +20,14 @@ JSON file format:
 
 ```json
 {
-  "tabs": [ String ]
+  "groups": [
+    "name": String,
+    "tabs": [ String ]
+    ]
 }
 ```
+
+Se o nome do grupo for vazio ou nao existir abre sem grupo.
 
 ## TODOs
 
@@ -34,10 +39,17 @@ JSON file format:
   - [x] Detetar tabs selecionadas
   - [x] Gerar JSON String
   - [x] Download do ficheiro
-- [] Tratar erros na funcao do shareButton
+- [x] Por butao mais fancy
+- [] Por a funcionar com os grupos
+  - [] Parsing
+  - [] Loading
+  - [] Para partilhar um grupo ja feito adicionar um dropdown com todos os grupos da
+      sessao e escolher os grupos para partilhar
+      (NOTA: Selecionar tabs num grupo nao preserva o grupo)
+- Corrigir query (varias sessoes abertas)
+
 - [] Nao fazer logo o download e mostrar o texto(output) para
     copy paste e um sitio para poder escolher o nome do ficheiro
-
 - [] Em vez de ficheiro usar um encoded token
 - [] Mostrar output na UI
 - [] Ter text box para carregar as tabs
