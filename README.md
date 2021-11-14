@@ -35,14 +35,15 @@ Se o nome do grupo for vazio ou nao existir abre sem grupo.
 - [x] Tem que as abrir
 - [x] Tratar dos erros
 - [x] Sanitizar o input
-- [] Gerar o ficheiro localmente
+- [x] Gerar o ficheiro localmente
   - [x] Detetar tabs selecionadas
   - [x] Gerar JSON String
   - [x] Download do ficheiro
 - [x] Por butao mais fancy
 - [] Por a funcionar com os grupos
-  - [] Parsing
-  - [] Loading
+  - [x] Gerar
+  - [x] Parsing
+  - [x] Loading
   - [] Para partilhar um grupo ja feito adicionar um dropdown com todos os grupos da
       sessao e escolher os grupos para partilhar
       (NOTA: Selecionar tabs num grupo nao preserva o grupo)

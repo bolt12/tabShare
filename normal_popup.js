@@ -13,34 +13,77 @@ fileSelector.addEventListener("change", (event) => {
   const reader = new FileReader();
 
   // Event Listener for file load
-  reader.addEventListener("load", () => {
+  reader.addEventListener("load", async () => {
     try {
       const parsedFile = JSON.parse(reader.result);
       cleanError();
 
-      const tabs = parsedFile["tabs"];
-      if (tabs) {
+      const groups = parsedFile["groups"];
+      if (groups) {
         cleanError();
 
-        // Check validity of URLs
-        for (const tab of tabs) {
-          const validityResult = isValidHttpUrl(tab);
-          if (! validityResult.result ) {
-            showError ( tab
-                      + ": is not a valid HTTP URL | "
-                      + validityResult.error);
-            return;
-          } else {
-            // All good
+        // Check validity of URLs for all groups
+        for (const group of groups) {
+          const tabs = group.tabs;
+          for (const tab of tabs) {
+            const validityResult = isValidHttpUrl(tab);
+            if (! validityResult.result ) {
+              showError ( tab
+                        + ": is not a valid HTTP URL | "
+                        + validityResult.error);
+              return;
+            } else {
+              // All good
+              cleanError();
+            }
           }
         }
 
+        const promises = [];
+
         // Open tabs
-        for (const tab of tabs) {
-          chrome.tabs.create({
-            url: tab
-          });
+        for (const group of groups) {
+          const tabs = group.tabs;
+          const tabsRes = [];
+
+          // Opening tabs and collecting all ids
+          for (const tab of tabs) {
+            const createdTab =
+              await chrome.tabs.create({
+                      url: tab
+                    });
+            tabsRes.push(createdTab.id);
+          }
+
+          // Create collapsed group
+          //
+          // We first get the last focused window which is not a popup;
+          // then create an anonymous group; then update the groups properties,
+          // i.e title.
+          chrome.windows.getLastFocused({
+            windowTypes: ['normal']
+          }, (lastFocusedWindow => {
+            chrome.tabs.group({
+              tabIds: tabsRes,
+              createProperties: {
+                windowId: lastFocusedWindow.id
+              }
+            }, (id => {
+              const p = chrome.tabGroups.update(
+                          id,
+                          { title: group.name,
+                            collapsed: true
+                          }
+                        );
+              promises.push(p);
+            }));
+          }));
+
         }
+
+        // Wait creating of all group tabs
+        await Promise.all(promises);
+
         window.close();
       } else {
         // error handling
@@ -65,6 +108,9 @@ fileSelector.addEventListener("change", (event) => {
 
 shareButton.addEventListener("click", async (event) => {
   const filename = "tabShare.json";
+
+  //TODO: Fix query. If multiple windows opened this will return tabs from all
+  //sessions.
   const selectedTabs = await chrome.tabs.query({
     currentWindow: false,
     highlighted: true
