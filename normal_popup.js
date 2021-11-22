@@ -60,25 +60,23 @@ fileSelector.addEventListener("change", (event) => {
           // We first get the last focused window which is not a popup;
           // then create an anonymous group; then update the groups properties,
           // i.e title.
-          chrome.windows.getLastFocused({
+          const p = chrome.windows.getLastFocused({
             windowTypes: ['normal']
-          }, (lastFocusedWindow => {
-            chrome.tabs.group({
+          }).then(async lastFocusedWindow => {
+            await chrome.tabs.group({
               tabIds: tabsRes,
               createProperties: {
                 windowId: lastFocusedWindow.id
-              }
-            }, (id => {
-              const p = chrome.tabGroups.update(
-                          id,
-                          { title: group.name,
-                            collapsed: true
-                          }
-                        );
-              promises.push(p);
-            }));
-          }));
+              }}).then(async id => {
+                await chrome.tabGroups.update(
+                  id,
+                  { title: group.name,
+                    collapsed: false
+                  });
+              });
+          });
 
+          promises.push(p);
         }
 
         // Wait creating of all group tabs
