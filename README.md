@@ -14,6 +14,20 @@ with someone.
 
 If you were looking for a solution, now you can with Google Chrome's new extension: TabShare !
 
+## How to use
+
+Open TabShare extension window. If you wish to share tabs all you have to do is to SHIFT
+or CONTROL select the tabs you want, decide whether you wish to group the tabs or not,
+name the group if that is the case and then press "Share selected tabs". A `tabShare.json`
+file will be downloaded! All you have to do is to share that with someone that also has
+the TabShare extension and can load the file!
+
+Make sure the URLs from your tabs are valid ones and/or can be accessible via HTTP or
+HTTPS protocols. For example: "chrome://extensions/:" is not a valid HTTP URL.
+
+Have fun sharing and contributing with ideas for improving! TabShare is only in Beta
+version and would appreciate feedback! :)
+
 ### File Format
 
 JSON file format:
@@ -21,38 +35,44 @@ JSON file format:
 ```json
 {
   "groups": [
-    "name": String,
-    "tabs": [ String ]
-    ]
+    {
+      "name": "MyGroup",
+      "tabs": [ "http://www.myurl.com" ]
+    }
+  ]
 }
 ```
 
-Se o nome do grupo for vazio ou nao existir abre sem grupo.
+The `tabs` key needs to have valid HTTP URLs.
 
-## TODOs
+## Features and TODOs
 
-- [x] Tem que importar um ficheirinho com as tabs para abrir
-- [x] Tem que as abrir
-- [x] Tratar dos erros
-- [x] Sanitizar o input
-- [x] Gerar o ficheiro localmente
-  - [x] Detetar tabs selecionadas
-  - [x] Gerar JSON String
-  - [x] Download do ficheiro
-- [x] Por butao mais fancy
-- [] Por a funcionar com os grupos
-  - [x] Gerar
-  - [x] Parsing
-  - [x] Loading
-  - [] Para partilhar um grupo ja feito adicionar um dropdown com todos os grupos da
-      sessao e escolher os grupos para partilhar
-      (NOTA: Selecionar tabs num grupo nao preserva o grupo)
-- Corrigir query (varias sessoes abertas)
+- Import tabShare file to load tabs automatically.
+- Generate tabShare file to share with others.
+- It works with Chrome's tab groups features.
 
-- [] Nao fazer logo o download e mostrar o texto(output) para
-    copy paste e um sitio para poder escolher o nome do ficheiro
-- [] Em vez de ficheiro usar um encoded token
-- [] Mostrar output na UI
-- [] Ter text box para carregar as tabs
-- [] Meter os grupos ao barulho
+### TODOs
 
+- Share groups that already exist in the current session;
+  (NOTE: Selecting tabs in a group does not preserve the group)
+- Fix query to work with multiple chrome sessions;
+  (NOTE: Right now if the last focused chrome window/session is not
+   the desired one, tabShare will open the tabs in the incorrect window)
+- Not only download the file but also show it in the UI instead so one can copy
+  paste it;
+- Instead of a `.json` file to share, use an encoded short link or even token.
+
+## Contributing
+
+First a disclaimer: I wrote this extension to solve a specific problem I had in the
+simplest way possible, hence having used vanilla Javascript. I am not really proud of
+the code I ended up writing but it works and it, truly is, simple. Having said this, I hope
+contributions to keep simple as well, unless there's a really good reason to change and do
+this extension with a framework like React, Vue or whatever latest trend is.
+
+I would really appreciate ideas and contributions on how to improve user experience and
+UI, hopefully something that could fit your patterns of using this extension!
+
+## Credit
+
+Icons made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](https://www.flaticon.com).
