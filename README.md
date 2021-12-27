@@ -62,6 +62,10 @@ The `tabs` key needs to have valid HTTP URLs.
   paste it;
 - Instead of a `.json` file to share, use an encoded short link or even token.
 
+Fun idea is to make it easy to ship an app or product with a TabShare token/file/shortlink
+and make the user open a bunch of relevant tabs organized by groups with every
+link, resource, material he needs to know to get started!
+
 ## Contributing
 
 First a disclaimer: I wrote this extension to solve a specific problem I had in the

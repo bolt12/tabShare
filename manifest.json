@@ -1,13 +1,13 @@
 {
   "name": "TabShare",
   "description": "Share your tabs and groups easily!",
-  "version": "1.0",
+  "version": "0.1.0",
   "manifest_version": 3,
   "icons": { "128": "icon/tabShare.png"
   },
   "background": {
   },
-  "permissions": ["storage", "activeTab", "scripting", "tabs", "tabGroups"],
+  "permissions": ["activeTab", "tabs", "tabGroups"],
   "action": {
     "default_popup": "popup.html"
   }
