@@ -1,5 +1,5 @@
 var popupWindow = window.open(
-    "normal_popup.html",
+    "src/normal_popup.html",
     "TabShare",
     "width=400,height=400"
 );

@@ -3,7 +3,7 @@
   "description": "Share your tabs and groups easily!",
   "version": "1.0",
   "manifest_version": 3,
-  "icons": { "128": "tabShare.png"
+  "icons": { "128": "icon/tabShare.png"
   },
   "background": {
   },
