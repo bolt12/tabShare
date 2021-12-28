@@ -2,6 +2,8 @@
 
 Share your Google Chrome Tabs easily.
 
+Chrome Extension: https://chrome.google.com/webstore/detail/tabshare/ojddpkfajpkclolheliiimohojdcbgjf
+
 ## Description
 
 Want to share a bunch of links with someone and don't want to paste them one by one in a
