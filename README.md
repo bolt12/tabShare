@@ -2,7 +2,7 @@
 
 Share your Google Chrome Tabs easily.
 
-Chrome Extension: https://chrome.google.com/webstore/detail/tabshare/ojddpkfajpkclolheliiimohojdcbgjf
+[Chrome Extension](https://chrome.google.com/webstore/detail/tabshare/ojddpkfajpkclolheliiimohojdcbgjf)
 
 ## Description
 
