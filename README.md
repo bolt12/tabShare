@@ -49,6 +49,8 @@ The `tabs` key needs to have valid HTTP URLs.
 
 ## Features and TODOs
 
+### Features
+
 - Import tabShare file to load tabs automatically.
 - Generate tabShare file to share with others.
 - It works with Chrome's tab groups features.
