@@ -42,14 +42,14 @@ protocols. For example, "chrome://extensions/" is not a valid HTTP URL.
 ## Manual File Creation
 
 You can also create a `tabShare` file manually for greater customization. When creating
-the file, use the reserved keyword "_NO_GROUP" as the group name if you want the tabs to
+the file, use the reserved keyword "NO_GROUP" as the group name if you want the tabs to
 open outside of a group.
 
 ```json
 {
   "groups": [
     {
-      "name": "_no_group",
+      "name": "NO_GROUP",
       "tabs": [ "http://www.myurl.com" ]
     }
   ]
