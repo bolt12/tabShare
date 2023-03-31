@@ -1,0 +1,29 @@
+{
+  "name": "tabshare",
+  "version": "2.0.0",
+  "description": "Share your Google Chrome Tabs easily.",
+  "main": "popup.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bolt12/tabShare.git"
+  },
+  "author": "Armando Santos",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/bolt12/tabShare/issues"
+  },
+  "homepage": "https://github.com/bolt12/tabShare#readme",
+  "dependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/preset-env": "^7.20.2",
+    "aos": "^2.3.4",
+    "babel-loader": "^9.1.2",
+    "html5-qrcode": "^2.3.7",
+    "qrious": "^4.0.2",
+    "webpack": "^5.77.0",
+    "webpack-cli": "^5.0.1"
+  }
+}

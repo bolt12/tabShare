@@ -1,86 +1,107 @@
 # TabShare
 
-Share your Google Chrome Tabs easily.
+Easily share multiple links and keep them organized with the TabShare Chrome Extension - now featuring QR Code support!
 
-[Chrome Extension](https://chrome.google.com/webstore/detail/tabshare/ojddpkfajpkclolheliiimohojdcbgjf)
+![TabShare Logo](./images/tabshare-logo.png)
+
+[Get it on the Chrome Web Store](https://chrome.google.com/webstore/detail/tabshare/ojddpkfajpkclolheliiimohojdcbgjf)
 
 ## Description
 
-Want to share a bunch of links with someone and don't want to paste them one by one in a
-text file? Want someone to share a bunch of links with you and don't want to manually
-open them one by one in new tabs?
+TabShare is an innovative Chrome extension designed to make sharing and organizing
+multiple links not only effortless but also enjoyable. Whether you're collaborating on a
+project, sharing fascinating articles with friends, or researching options for your next
+purchase, TabShare takes the process of sharing and opening multiple tabs to the next
+level.
 
-If you are reading this then surely you found yourself looking either for gifts or
-choosing between many different options and keeping tabs open only to tediously share it
-with someone.
+Say goodbye to the tedious task of copying and pasting links one by one. With TabShare,
+you can share and open all your links at once, saving you precious time and hassle. And
+now, with QR Code support, sharing and loading multiple tabs has never been easier!
 
-If you were looking for a solution, now you can with Google Chrome's new extension: TabShare !
+## Features
 
-## How to use
+- Select multiple tabs to share with just a few clicks
+- Organize shared tabs into groups
+- Import `tabShare` files or scan QR Codes to load tabs automatically
+- Create a `tabShare` file manually for greater customization
+- Seamlessly works with Chrome's tab groups feature
+- Generate QR Codes for easy sharing
 
-Open TabShare extension window. If you wish to share tabs all you have to do is to SHIFT
-or CONTROL select the tabs you want, decide whether you wish to group the tabs or not,
-name the group if that is the case and then press "Share selected tabs". A `tabShare.json`
-file will be downloaded! All you have to do is to share that with someone that also has
-the TabShare extension and can load the file!
+## How to Use
 
-Make sure the URLs from your tabs are valid ones and/or can be accessible via HTTP or
-HTTPS protocols. For example: "chrome://extensions/:" is not a valid HTTP URL.
+1. Open the TabShare extension window.
+2. Hold down the SHIFT or CONTROL key and select the tabs you want to share.
+3. Choose whether you want to group the tabs or not, and name the group if necessary.
+4. You can also choose to preserve the current groups of your selected tabs.
+5. Click "Share selected tabs". A `tabShare.json` file will be downloaded, or a QR Code will be generated.
+6. Share the downloaded file or QR Code with someone who also has the TabShare extension installed.
 
-Have fun sharing and contributing with ideas for improving! TabShare is only in Beta
-version and would appreciate feedback! :)
+Make sure the URLs from your tabs are valid ones and/or can be accessed via HTTP or HTTPS
+protocols. For example, "chrome://extensions/" is not a valid HTTP URL.
 
-### File Format
+## Manual File Creation
 
-JSON file format:
+You can also create a `tabShare` file manually for greater customization. When creating
+the file, use the reserved keyword "_NO_GROUP" as the group name if you want the tabs to
+open outside of a group.
 
 ```json
 {
   "groups": [
     {
-      "name": "MyGroup",
+      "name": "_no_group",
       "tabs": [ "http://www.myurl.com" ]
     }
   ]
 }
 ```
 
-The `tabs` key needs to have valid HTTP URLs.
+## UI Screenshots
 
-## Features and TODOs
+![TabShare UI Screenshot 1](./images/tabShare1.jpeg)
 
-### Features
+![TabShare UI Screenshot 2](./images/tabShare2.jpeg)
 
-- Import tabShare file to load tabs automatically.
-- Generate tabShare file to share with others.
-- It works with Chrome's tab groups features.
+![TabShare UI Screenshot 3](./images/tabShare3.jpeg)
 
-### TODOs
+## Future ideas
 
-- Share groups that already exist in the current session;
-  (NOTE: Selecting tabs in a group does not preserve the group)
-- Fix query to work with multiple chrome sessions;
-  (NOTE: Right now if the last focused chrome window/session is not
-   the desired one, tabShare will open the tabs in the incorrect window)
-- Not only download the file but also show it in the UI instead so one can copy
-  paste it;
-- Instead of a `.json` file to share, use an encoded short link or even token.
-
-Fun idea is to make it easy to ship an app or product with a TabShare token/file/shortlink
-and make the user open a bunch of relevant tabs organized by groups with every
-link, resource, material he needs to know to get started!
+We're exploring the idea of shipping apps or products with a TabShare
+token/file/shortlink, making it easy for users to open a collection of relevant tabs
+organized by groups with every link, resource, and material they need to get started!
 
 ## Contributing
 
-First a disclaimer: I wrote this extension to solve a specific problem I had in the
-simplest way possible, hence having used vanilla Javascript. I am not really proud of
-the code I ended up writing but it works and it, truly is, simple. Having said this, I hope
-contributions to keep simple as well, unless there's a really good reason to change and do
-this extension with a framework like React, Vue or whatever latest trend is.
+TabShare was initially created to solve a specific problem in the simplest way possible,
+using vanilla Javascript. We hope to keep things simple unless there's a compelling reason
+to adopt a framework like React or Vue.
 
-I would really appreciate ideas and contributions on how to improve user experience and
-UI, hopefully something that could fit your patterns of using this extension!
+We welcome ideas and contributions on how to improve the user experience and UI, and we're
+excited to see how the community can help shape the future of TabShare!
 
-## Credit
+## Build and Load Locally
 
-Icons made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](https://www.flaticon.com).
+If you want to build and load the TabShare extension locally, follow these simple steps:
+
+1. Clone or download the repository to your local machine.
+
+```bash
+git clone https://github.com/yourusername/tabshare.git
+```
+2. Open Google Chrome and navigate to chrome://extensions/.
+3. Enable 'Developer mode' by toggling the switch in the top-right corner of the Extensions page.
+4. Click on the 'Load unpacked' button and select the directory containing the downloaded repository.
+
+The TabShare extension should now be loaded into your Chrome browser, and you can use it
+as you would with the version from the Chrome Web Store.
+
+Remember to pull any updates from the repository and reload the extension in the
+chrome://extensions/ page to get the latest features and bug fixes.
+
+Make sure to replace "yourusername" in the `git clone` command with your actual GitHub
+username. This addition will guide users on how to build and load the TabShare extension
+locally.
+
+## Credits
+
+TabShare icons made by Smashicons from www.flaticon.com.

@@ -1,48 +1,100 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tab Sharing Extension</title>
+
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- AOS CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Fontawesome Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="normal_popup.css">
-  </head>
-  <body>
-  <section class="section">
-     <div class="container is-fluid">
-       <h1 class="title"> Tab Share </h1>
-       <h2 class="subtitle"> Share your tabs JSON file </h2>
-       <div class="field">
-         <input id="groupSwitch" type="checkbox" name="groupSwitch" class="switch switch-input">
-         <label for="groupSwitch">Group tabs?</label>
-         <div class="field">
-           <label for="groupInput">Group name:</label>
-           <input type="text" id="groupInput" class="text-input" disabled name="groupInput"
-                  placeholder="Cookie recipes group"
-           >
-         </div>
-       </div>
-       <button class="button is-primary" id="shareButton"> Share selected tabs </button>
-     </div>
-     <br>
-     <div class="container is-fluid">
-       <h2 class="subtitle"> Load your tabs JSON file </h2>
-       <div class="file">
-         <label class="file-label">
-           <input type="file" id="fileSelector" class="file-input" name="resume">
-           <span class="file-cta">
-             <span class="file-icon">
-               <i class="fas fa-upload"></i>
-             </span>
-             <span class="file-label">
-               Choose a file…
-             </span>
-           </span>
-         </label>
-      </div>
-      <div id="cname" class="emsg"></div>
-     </div>
-  </section>
-  </body>
-  <script src="normal_popup.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-10 max-w-lg">
+        <div class="bg-white shadow-lg rounded-lg p-8" data-aos="fade-up">
+            <img src="logo.png" alt="Cool Logo" class="w-32 mx-auto mb-6">
+            <h1 class="text-2xl font-semibold mb-4 text-center">Tab Sharing Extension</h1>
+
+            <div id="errorContainer" class="error hidden"></div>
+            <div class="mb-6">
+                <p class="text-sm text-gray-700 mb-4 text-center">Select the tabs you wish to share before opening this extension.</p>
+                <h2 class="text-xl font-semibold mb-3">Share Tabs</h2>
+                <div class="space-y-2">
+                    <!-- Checkbox and text input -->
+                    <!-- ... -->
+                  <div id="shareOptions" style="display: flex; gap: 10px;">
+                    <div class="flex items-center mb-4 tooltip">
+                        <input type="checkbox" id="groupTabsCheck" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="groupTabsCheck" class="ml-2 text-sm text-gray-700">Group all tabs</label>
+                        <span class="tooltiptext">Enable this option to group tabs together when sharing.</span>
+                    </div>
+                    <div class="flex items-center mb-4 tooltip">
+                      <input type="checkbox" id="preserveGroupsCheck" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                      <label for="preserveGroupsCheck" class="ml-2 text-sm text-gray-700">Preserve tab groups</label>
+                      <span class="tooltiptext">Enable this option to preserve the current tab group information when sharing.</span>
+                    </div>
+                  </div>
+
+                <div class="mb-4">
+                    <label for="shareGroupName" class="block text-sm font-medium text-gray-700">Group Name (optional):</label>
+                    <input type="text" id="shareGroupName" class="mt-1 block w-full border border-gray-300 rounded-md py-2 px-4 text-sm text-gray-900 placeholder-gray-500" placeholder="Enter group name" disabled>
+                </div>
+
+                    <div class="flex space-x-4">
+                        <button id="shareTabsJSON" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Share as JSON</button>
+                        <button id="shareTabsQR" class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                          <i class="fas fa-qrcode text-lg mr-2 align-middle"></i> Share as QR Code</button>
+
+                    </div>
+                    <div id="qrCodeContainer" class="hidden mt-4 text-center">
+                      <div id="qrCodeWrapper">
+                        <canvas id="qrCodeCanvas"></canvas>
+                      </div>
+                      <div id="downloadButtonWrapper">
+                        <button id="downloadQRCode">Download QR Code</button>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-3">Load Tabs</h2>
+
+                <div class="mb-4 tooltip">
+                    <span class="tooltiptext">Select a file with saved tabs to load them.</span>
+                </div>
+                <input type="file" id="fileSelector" class="hidden mt-1 block w-full border border-gray-300 rounded-md py-2 px-4 text-sm text-gray-900">
+
+                <button type="button" id="loadTabs" class="w-full mt-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Load Tabs (from JSON)</button>
+
+                <button id="scanQRCode" class="w-full mt-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400">Scan QR Code</button>
+                <div id="video" class="mt-4 text-center hidden"></div>
+            </div>
+    </div>
+
+    <!-- AOS JavaScript -->
+    <script src="../node_modules/aos/dist/aos.js"></script>
+
+    <!-- QRCode JavaScript -->
+    <script src="../node_modules/qrious/dist/qrious.min.js"></script>
+
+    <!-- Instascan JavaScript -->
+    <script src="../node_modules/html5-qrcode/html5-qrcode.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="popup.bundle.js"></script>
+</body>
 </html>
+
