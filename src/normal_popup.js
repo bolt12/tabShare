@@ -1,203 +1,88 @@
-// let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+// Import necessary modules
+import AOS from 'aos';
+import { initUI
+       , showError
+       , displayError
+       , hideError
+       } from './ui';
+import { getHighlightedTabs
+       , generateTabGroupObject
+       , saveAsJSON
+       , generateQRCode
+       , loadTabsFromTabGroupObject
+       , scanQRCode
+       } from './tabUtils';
 
-// Top level file input form object;
-const fileSelector = document.getElementById("fileSelector");
-const shareButton = document.getElementById("shareButton");
-const groupSwitch = document.getElementById("groupSwitch");
-const groupInput = document.getElementById("groupInput");
+// Initialize AOS (Animate On Scroll library)
+AOS.init();
 
+// Initialize UI elements and event listeners
+initUI();
 
-fileSelector.addEventListener("change", (event) => {
-  // Get the file
-  const [file] = event.target.files;
-  const reader = new FileReader();
-
-  // Event Listener for file load
-  reader.addEventListener("load", async () => {
-    try {
-      const parsedFile = JSON.parse(reader.result);
-      cleanError();
-
-      const groups = parsedFile["groups"];
-      if (groups) {
-        cleanError();
-
-        // Check validity of URLs for all groups
-        for (const group of groups) {
-          const tabs = group.tabs;
-          for (const tab of tabs) {
-            const validityResult = isValidHttpUrl(tab);
-            if (! validityResult.result ) {
-              showError ( tab
-                        + ": is not a valid HTTP URL | "
-                        + validityResult.error);
-              return;
-            } else {
-              // All good
-              cleanError();
-            }
-          }
-        }
-
-        const promises = [];
-
-        // Open tabs
-        for (const group of groups) {
-          const tabs = group.tabs;
-          const tabsRes = [];
-
-          // Opening tabs and collecting all ids
-          for (const tab of tabs) {
-            const createdTab =
-              await chrome.tabs.create({
-                      url: tab
-                    });
-            tabsRes.push(createdTab.id);
-          }
-
-          // Create collapsed group
-          //
-          // We first get the last focused window which is not a popup;
-          // then create an anonymous group; then update the groups properties,
-          // i.e title.
-          const p = chrome.windows.getLastFocused({
-            windowTypes: ['normal']
-          }).then(async lastFocusedWindow => {
-            await chrome.tabs.group({
-              tabIds: tabsRes,
-              createProperties: {
-                windowId: lastFocusedWindow.id
-              }}).then(async id => {
-                await chrome.tabGroups.update(
-                  id,
-                  { title: group.name,
-                    collapsed: false
-                  });
-              });
-          });
-
-          promises.push(p);
-        }
-
-        // Wait creating of all group tabs
-        await Promise.all(promises);
-
-        window.close();
-      } else {
-        // error handling
-        showError("Please input a correctly formatted file");
-      }
-    }
-    catch (error) {
-      // error handling
-      showError( error );
-    }
-  });
-
-  if (file) {
-    // File load.
-    // This will trigger the 'load' event.
-    reader.readAsText(file);
-  } else {
-    showError("Load a file please!");
-  }
-
-});
-
-shareButton.addEventListener("click", async (event) => {
-  const filename = "tabShare.json";
-
-  //TODO: Fix query. If multiple windows opened this will return tabs from all
-  //sessions.
-  const selectedTabs = await chrome.tabs.query({
-    currentWindow: false,
-    highlighted: true
-  });
-  const result = { groups: [] };
-  const group = { name: "", tabs: [] };
-
-  // Check for group
-  if (groupSwitch.checked && groupInput.value) {
-    group.name = groupInput.value;
-  }
-
-  for (const tab of selectedTabs) {
-    group.tabs.push(tab.url);
-  }
-
-  result.groups.push(group);
-
-  const blob = new Blob([JSON.stringify(result)], {type : 'application/json'});
-  const blobURL = window.URL.createObjectURL(blob);
-
-  const tempLink = document.createElement('a');
-  tempLink.style.display = 'none';
-  tempLink.href = blobURL;
-  tempLink.setAttribute('download', filename);
-  // Safari thinks _blank anchor are pop ups. We only want to set _blank
-  // target if the browser does not support the HTML5 download attribute.
-  // This allows you to download files in desktop safari if pop up blocking
-  // is enabled.
-  if (typeof tempLink.download === 'undefined') {
-    tempLink.setAttribute('target', '_blank');
-  }
-  document.body.appendChild(tempLink);
-  tempLink.click();
-  document.body.removeChild(tempLink);
-});
-
-groupSwitch.addEventListener("change", (event) => {
-  if (groupSwitch.checked) {
-    groupInput.disabled = false;
-  } else {
-    groupInput.value = "";
-    groupInput.disabled = true;
-  }
-})
-
-// -------- Auxiliary function --------
-
-/*
- * Cleans the errors in HTML
- *
- */
-function cleanError () {
-  const error = document.getElementById("cname");
-  fileSelector.classList.remove("err");
-  error.innerHTML = "";
-}
-
-/*
- * Shows the errors in HTML
- *
- */
-function showError (errorMsg = "") {
-  const error = document.getElementById("cname");
-  fileSelector.classList.add("err");
-  error.innerHTML = errorMsg;
-}
-
-/*
- * Checks if a given String is a valid HTTP URL
- *
- * Returns a custom object:
- * {
- *    result: Boolean,
- *    error: String
- * }
- */
-function isValidHttpUrl(input) {
+// Add event listener for "Share Tabs as JSON" button
+document.getElementById("shareTabsJSON").addEventListener("click", async () => {
   try {
-    const url = new URL(input);
-    return { result: url.protocol === "http:" || url.protocol === "https:"
-           , error: ""
-           };
+    // Get highlighted tabs and generate tab group object
+    const highlightedTabs = await getHighlightedTabs();
+    const tabGroupObject = await generateTabGroupObject(highlightedTabs);
 
+    // Save tab group object as JSON file
+    saveAsJSON(tabGroupObject);
+
+    // Hide any previously displayed error messages
+    hideError();
   } catch (error) {
-    return { result: false
-           , error: error
-           };
+    // Display error message if something goes wrong
+    displayError(`Error sharing tabs as JSON: ${error}`);
   }
+});
 
-}
+// Add event listener for "Share Tabs as QR Code" button
+document.getElementById("shareTabsQR").addEventListener("click", async () => {
+  try {
+    // Get highlighted tabs and generate tab group object
+    const highlightedTabs = await getHighlightedTabs();
+    const tabGroupObject = await generateTabGroupObject(highlightedTabs);
 
+    // Generate QR code for the tab group object
+    generateQRCode(tabGroupObject);
+
+    // Hide any previously displayed error messages
+    hideError();
+  } catch (error) {
+    // Display error message if something goes wrong
+    displayError(`Error sharing tabs as QR Code: ${error}`);
+  }
+});
+
+// Load Tabs with JSON file
+document.getElementById('loadTabs').addEventListener("click", async () => {
+  const fileSelector = document.getElementById("fileSelector");
+  fileSelector.addEventListener("change", (event) => {
+    const file = fileSelector.files[0];
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const parsedFile = JSON.parse(reader.result);
+        await loadTabsFromTabGroupObject(parsedFile);
+        hideError();
+        window.close();
+      } catch (error) {
+        displayError(`Error loading tabs from file: ${error}`);
+      }
+    };
+
+    if (file) {
+      // File load.
+      // This will trigger the 'load' event.
+      reader.readAsText(file);
+      hideError();
+    } else {
+      displayError("Please select a file to load.");
+    }
+  });
+  fileSelector.click();
+});
+
+// Load Tabs with QR Code
+document.getElementById('scanQRCode').addEventListener('click', scanQRCode);

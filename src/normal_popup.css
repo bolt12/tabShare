@@ -1,15 +1,94 @@
-
-button.current {
-  box-shadow: 0 0 0 2px white,
-              0 0 0 4px black;
+* {
+  box-sizing: border-box;
 }
 
-.err {
-  background: #ffe6ee;
-  border: 1px solid #b1395f;
+html, body {
+  width: 100%;
+  min-width: 100%;
+  font-family: 'Inter', sans-serif;
+  max-width: 800px;
 }
 
-.emsg {
-  color: #c12020
-  ; font-weight: bold;
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+}
+
+@media (min-width: 768px) {
+  html, body {
+    width: auto;
+    min-width: auto;
+  }
+
+  .container {
+    width: auto;
+  }
+}
+
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  position: absolute;
+  left: 50%;
+  bottom: 150%;
+  transform: translateX(-50%);
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 100;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+#qrCodeContainer {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#qrCodeWrapper {
+  margin-bottom: 10px;
+}
+
+#downloadButtonWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+#downloadQRCode {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
 }
