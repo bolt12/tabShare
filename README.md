@@ -2,7 +2,7 @@
 
 Easily share multiple links and keep them organized with the TabShare Chrome Extension - now featuring QR Code support!
 
-![TabShare Logo](./images/tabshare-logo.png)
+![TabShare Logo](./icon/tabShare.png)
 
 [Get it on the Chrome Web Store](https://chrome.google.com/webstore/detail/tabshare/ojddpkfajpkclolheliiimohojdcbgjf)
 
